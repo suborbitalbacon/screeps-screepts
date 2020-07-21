@@ -1,2 +1,2 @@
 # screeps-screepts
-A repo for my screeps.com scripts
+A dumping ground for my [screeps](https://screeps.com/) scripts
