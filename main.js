@@ -2,8 +2,7 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var tower = require('tower');
-var screepsPerRole = {'harvester':2, 'upgrader':0, 'builder':0};
-var ROOM_NAME = "W8N4"
+var screepsPerRole = {'harvester':2, 'upgrader':5, 'builder':6};
 var SPAWN_NAME = 'Spawn1'
 
 module.exports.loop = function () {

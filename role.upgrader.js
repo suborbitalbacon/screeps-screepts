@@ -17,8 +17,12 @@ var roleUpgrader = {
 	    }
 
 	    if(creep.memory.upgrading) {
-            if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+            var range = creep.pos.getRangeTo(creep.room.controller);
+            if (range > 1) {
                 creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+            if (range <= 3) {
+                creep.upgradeController(creep.room.controller);
             }
         }
         else {
