@@ -1,7 +1,10 @@
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
-var screepsPerRole = {'harvester':2, 'upgrader':4, 'builder':2};
+var tower = require('tower');
+var screepsPerRole = {'harvester':2, 'upgrader':0, 'builder':0};
+var ROOM_NAME = "W8N4"
+var SPAWN_NAME = 'Spawn1'
 
 module.exports.loop = function () {
 
@@ -15,24 +18,30 @@ module.exports.loop = function () {
 	for(var role in screepsPerRole){
 		var numScreeps = _.filter(Game.creeps, (creep) => creep.memory.role == role);
 		if(numScreeps.length < screepsPerRole[role]) {
-			var newName = role + Game.time;
-			console.log('Spawning new ' + role + ': ' + newName);
-			Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName, 
-				{memory: {'role': role}});
+            if(Game.spawns[SPAWN_NAME].store.getCapacity(RESOURCE_ENERGY) >= 300 || !Game.spawns[SPAWN_NAME].spawning){
+                var newName = role + Game.time;
+                console.log('Spawning new ' + role + ': ' + newName);
+                Game.spawns[SPAWN_NAME].spawnCreep([WORK,CARRY,MOVE], newName, 
+                    {memory: {'role': role}});
+            }
 		}
 	}
     
-    if(Game.spawns['Spawn1'].spawning) { 
-        var spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
-        Game.spawns['Spawn1'].room.visual.text(
+    if(Game.spawns[SPAWN_NAME].spawning) { 
+        var spawningCreep = Game.creeps[Game.spawns[SPAWN_NAME].spawning.name];
+        Game.spawns[SPAWN_NAME].room.visual.text(
             '🛠️' + spawningCreep.memory.role,
-            Game.spawns['Spawn1'].pos.x + 1, 
-            Game.spawns['Spawn1'].pos.y, 
+            Game.spawns[SPAWN_NAME].pos.x + 1,
+            Game.spawns[SPAWN_NAME].pos.y, 
             {align: 'left', opacity: 0.8});
     }
 
+   var towers = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER, my: true}});
+   towers.forEach(tower.run);
+
     for(var name in Game.creeps) {
-        var creep = Game.creeps[name];
+		var creep = Game.creeps[name];
+		
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
         }

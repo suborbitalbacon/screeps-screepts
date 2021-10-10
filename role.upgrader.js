@@ -2,6 +2,10 @@ var screepToolkit = require('get_energy');
 var roleUpgrader = {
     /** @param {Creep} creep **/
     run: function(creep) {
+        if(typeof creep.memory.upgrading == 'undefined'){
+            creep.memory.upgrading = false;
+        }
+        
 
         if(creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
